@@ -25,10 +25,8 @@
 <title>AP0551 Forensic DNA Profiling – Module Assistant</title>
 <meta name="description" content="Frequently asked questions for AP0551 Forensic DNA Profiling.">
 <style>
-/* OpenDyslexic: uses a copy installed on the device. If CONFIG.LOAD_WEB_FONTS is true,
-   the script below also loads OpenDyslexic, Lexend and Atkinson Hyperlegible from the internet. */
-@font-face{font-family:"OpenDyslexic";font-weight:400;font-style:normal;src:local("OpenDyslexic"),local("OpenDyslexic-Regular");}
-@font-face{font-family:"OpenDyslexic";font-weight:700;font-style:normal;src:local("OpenDyslexic Bold"),local("OpenDyslexic-Bold");}
+/* Fonts: the choices offered are the sans serif fonts recommended in the British Dyslexia Association's Dyslexia Style Guide.
+   Open Sans is loaded from Google Fonts when CONFIG.LOAD_WEB_FONTS is true; the others use fonts installed on the student's device. */
 
 :root{
   --scale:1; --lh:1.55; --ls:0em; --ws:0em;
@@ -45,11 +43,14 @@ html[data-theme="yellowblack"]{--bg:#000000;--surface:#000000;--surface2:#1A1A00
 html[data-theme="cream"]{--bg:#FAF0CD;--surface:#FFF9E3;--surface2:#F3E7BD;--text:#262626;--muted:#4A4433;--primary:#1B4F72;--on-primary:#FFFFFF;--border:#B9A566;--link:#1B4F72;--focus:#8A3B00;--hero-bg:#EAD9A0;--hero-text:#262626;--hero-muted:#3F3A2A;--user-bg:#1B4F72;--user-text:#FFFFFF;--peak-op:.75;}
 html[data-theme="blue"]{--bg:#DCEBFA;--surface:#EAF3FC;--surface2:#C9DFF5;--text:#0B2540;--muted:#23415F;--primary:#0B4F8A;--on-primary:#FFFFFF;--border:#6F9BC8;--link:#0B4F8A;--focus:#7A2E00;--hero-bg:#B7D3F0;--hero-text:#0B2540;--hero-muted:#173A5E;--user-bg:#0B4F8A;--user-text:#FFFFFF;--peak-op:.75;}
 
-html[data-font="opendyslexic"]{--ff:"OpenDyslexic","Comic Sans MS","Comic Neue",Verdana,sans-serif;}
-html[data-font="lexend"]{--ff:"Lexend","Segoe UI",Verdana,sans-serif;}
-html[data-font="atkinson"]{--ff:"Atkinson Hyperlegible","Segoe UI",Verdana,sans-serif;}
-html[data-font="comic"]{--ff:"Comic Sans MS","Comic Neue","Chalkboard SE","Marker Felt",Verdana,sans-serif;}
+html[data-font="opensans"]{--ff:"Open Sans","Segoe UI",Arial,sans-serif;}
+html[data-font="arial"]{--ff:Arial,"Helvetica Neue",Helvetica,sans-serif;}
 html[data-font="verdana"]{--ff:Verdana,Geneva,Tahoma,sans-serif;}
+html[data-font="tahoma"]{--ff:Tahoma,Verdana,Geneva,sans-serif;}
+html[data-font="trebuchet"]{--ff:"Trebuchet MS","Lucida Grande","Lucida Sans Unicode",sans-serif;}
+html[data-font="calibri"]{--ff:Calibri,Carlito,"Segoe UI",Arial,sans-serif;}
+html[data-font="centurygothic"]{--ff:"Century Gothic","URW Gothic","Avant Garde",Arial,sans-serif;}
+html[data-font="comic"]{--ff:"Comic Sans MS","Comic Neue","Chalkboard SE","Marker Felt",Verdana,sans-serif;}
 html[data-spacing="wide"]{--lh:1.8;--ls:.04em;--ws:.12em;}
 html[data-spacing="wider"]{--lh:2.05;--ls:.08em;--ws:.2em;}
 
@@ -233,6 +234,7 @@ html[data-motion="off"] *{animation:none!important;transition:none!important;scr
       <fieldset>
         <legend>Font</legend>
         <div class="optrow" id="fontOpts"></div>
+        <p class="hint" style="margin:.7rem 0 0;font-size:.88rem">These are sans serif fonts recommended in the British Dyslexia Association’s Dyslexia Style Guide. All except Open Sans use fonts installed on your device, so they may look different on some devices.</p>
       </fieldset>
 
       <fieldset>
@@ -391,13 +393,20 @@ const CONFIG = {
   TUTOR_NAME: "Dr Eleanor Graham",
   TUTOR_EMAIL: "eleanor.graham@northumbria.ac.uk",
   TUTOR_OFFICE: "ELA 511",
+  STAFF: [                            // other teaching staff. Add each person's email here and it becomes a clickable link in the answers
+    {name: "Dr Aaron Amankwaa", email: "aaron.o.amankwaa@northumbria.ac.uk"},
+    {name: "Dr Kate Randall",   email: "kate.randall@northumbria.ac.uk"},
+    {name: "Dr Desire Dalton",  email: "desire.dalton@northumbria.ac.uk"}
+  ],
+  PROGRAMME_LEADER_NAME: "",          // optional: shown wherever an answer sends students to the Programme Leader
+  PROGRAMME_LEADER_EMAIL: "",
   ANNOUNCEMENT: "",                   // e.g. "Lab 1 room has changed – check your timetable."
   LAST_UPDATED: "29 September 2026",
   COURSEWORK_DEADLINE_ISO: "2026-12-14T09:00:00Z",       // machine-readable, used for the day countdown
   DEADLINE_LABEL: "09:00 GMT, Monday 14 December 2026",  // how the deadline is written for students
   AI_ASSESSMENT_NOTE: "Task 4 of this coursework specifically requires you to use an AI tool (see the Task 4 answer).",  // leave "" if not relevant
   FEEDBACK_URL: "",                   // optional: link to a form where students can suggest missing questions
-  LOAD_WEB_FONTS: true,               // false = don't load extra fonts from the internet (use this if Blackboard or your host blocks them)
+  LOAD_WEB_FONTS: true,               // true = load Open Sans from Google Fonts. false = no third-party requests (Open Sans then falls back to a similar system font)
   PORTAL_URL: "https://myportal.northumbria.ac.uk/Help-and-support/My-Programme",
   FEEDBACK_WORKING_DAYS: 20,          // marks and feedback turnaround
   STORAGE_PREFIX: "ap0551bot_"        // make this unique for each module chatbot
@@ -444,7 +453,21 @@ const PORTAL_TOPICS = [
 ];
 const portalLink = () => '<a href="' + CONFIG.PORTAL_URL + '" target="_blank" rel="noopener noreferrer">Student Portal</a>';
 const portalNote = () => '<p class="note">Official guidance, policies and forms are in the ' + portalLink() + ' (Help and support, My Programme). You need to be signed in as a current student.</p>';
-const mail = () => '<a href="mailto:' + CONFIG.TUTOR_EMAIL + '">' + CONFIG.TUTOR_EMAIL + '</a>';
+/* ---- contact helpers: every answer that sends a student to a member of staff uses these ---- */
+const mailto = (addr, subject) => 'mailto:' + addr + (subject ? '?subject=' + encodeURIComponent(subject) : '');
+const emailLink = addr => '<a href="' + mailto(addr, CONFIG.MODULE_CODE + ' module query') + '">' + esc(addr) + '</a>';
+const mail = () => emailLink(CONFIG.TUTOR_EMAIL);                                   // the module tutor's email link
+const tutorContact = () => esc(CONFIG.TUTOR_NAME) + ' (' + mail() + ')';           // Dr Name (email link)
+const tutorRoleContact = () => 'your ' + esc(CONFIG.TUTOR_ROLE) + ', ' + tutorContact();
+const plContact = () => {                                                           // Programme Leader, with email if set in CONFIG
+  const n = CONFIG.PROGRAMME_LEADER_NAME, e = CONFIG.PROGRAMME_LEADER_EMAIL;
+  return 'your Programme Leader' + (n ? ', ' + esc(n) : '') + (e ? ' (' + emailLink(e) + ')' : '');
+};
+const staffLink = name => {                                                         // bold name, plus email link if listed in CONFIG.STAFF
+  const all = [{name: CONFIG.TUTOR_NAME, email: CONFIG.TUTOR_EMAIL}].concat(CONFIG.STAFF || []);
+  const p = all.find(x => x.name === name);
+  return '<strong>' + esc(name) + '</strong>' + (p && p.email ? ' (' + emailLink(p.email) + ')' : '');
+};
 
 /* =====================================================================
    PART 2 of 3: MODULE-SPECIFIC CONTENT
@@ -483,10 +506,10 @@ const MODULE_KB = [
 {id:'staff', cat:'module', q:'Who teaches on this module?',
  kw:['who teaches','teaching team','staff','lecturers','who delivers','amankwaa','randall','dalton','aaron','kate','desire','who is teaching'],
  a:()=>`<p>The teaching team listed in the 2026–27 teaching schedule is:</p>${ul([
-  '<strong>Dr Eleanor Graham</strong> (Module Tutor): module introduction, collection and extraction, population genetics, evaluating the strength of DNA evidence, reporting results, and the tutorials and labs (with Dr Dalton)',
-  '<strong>Dr Aaron Amankwaa</strong>: forensic DNA markers (general) and the National DNA Database',
-  '<strong>Dr Kate Randall</strong>: the two PCR lectures (qPCR and end-point PCR; STR profiling and capillary electrophoresis)',
-  '<strong>Dr Desire Dalton</strong>: co-delivers the tutorials and Labs 1 to 3'])}${src('Teaching schedule')}`,
+  staffLink('Dr Eleanor Graham') + ' (Module Tutor): module introduction, collection and extraction, population genetics, evaluating the strength of DNA evidence, reporting results, and the tutorials and labs (with Dr Dalton)',
+  staffLink('Dr Aaron Amankwaa') + ': forensic DNA markers (general) and the National DNA Database',
+  staffLink('Dr Kate Randall') + ': the two PCR lectures (qPCR and end-point PCR; STR profiling and capillary electrophoresis)',
+  staffLink('Dr Desire Dalton') + ': co-delivers the tutorials and Labs 1 to 3'])}${src('Teaching schedule')}`,
  rel:['schedule','tutor']},
 
 {id:'how-taught', cat:'module', q:'How will I be taught?',
@@ -522,7 +545,7 @@ const MODULE_KB = [
 
 {id:'attendance', cat:'sessions', q:'Do I have to attend every session?',
  kw:['attendance','attend','miss','missed','absent','compulsory','mandatory','monitored','miss a lecture','miss a lab','cannot attend','timetable change','timetable changes','changed'],
- a:()=>`<p>Yes. You are expected to attend <strong>all timetabled sessions</strong> and attendance is monitored. Timetables are occasionally updated, so check yours regularly. Known changes are communicated by email and/or module announcement.</p><p>If you are going to miss a session, email ${esc(CONFIG.TUTOR_NAME)} (${mail()}) as early as you can.</p>${src('Teaching schedule')}`,
+ a:()=>`<p>Yes. You are expected to attend <strong>all timetabled sessions</strong> and attendance is monitored. Timetables are occasionally updated, so check yours regularly. Known changes are communicated by email and/or module announcement.</p><p>If you are going to miss a session, email ${tutorContact()} as early as you can.</p>${src('Teaching schedule')}`,
  rel:['schedule','tutor']},
 
 {id:'reading', cat:'sessions', q:'Where is the reading list?',
@@ -556,7 +579,7 @@ const MODULE_KB = [
 
 {id:'data-files', cat:'coursework', q:'Which files do I need, and how do I find my own data?',
  kw:['files','spreadsheet','excel','lookup','look up','student id','my exhibit','my profile','my data','dna-17','population data','task1_dna_lookup','task2_dna_profile','xlsx','seeded','exhibit pair','which files','missing file','cannot find file','population frequencies'],
- a:()=>`<p>You need the <strong>Reporting Template</strong> (Word) and the <strong>DNA-17 population data</strong> (Excel). The template also refers to two lookup spreadsheets:</p>${ul(['<strong>Task 1</strong> (Parts B and C): look up your exhibit pair and DNA quantity using your student ID in <em>Task1_DNA_Lookup.xlsx</em>.','<strong>Task 2</strong>: look up your individual DNA profile using your student ID in <em>Task2_DNA_Profile.xlsx</em>.'])}<p>Everyone has different values, so make sure you use the row for your own student ID. If a file is missing from Blackboard, email ${esc(CONFIG.TUTOR_NAME)} (${mail()}).</p>${src('Assessment Brief and Coursework Template')}`,
+ a:()=>`<p>You need the <strong>Reporting Template</strong> (Word) and the <strong>DNA-17 population data</strong> (Excel). The template also refers to two lookup spreadsheets:</p>${ul(['<strong>Task 1</strong> (Parts B and C): look up your exhibit pair and DNA quantity using your student ID in <em>Task1_DNA_Lookup.xlsx</em>.','<strong>Task 2</strong>: look up your individual DNA profile using your student ID in <em>Task2_DNA_Profile.xlsx</em>.'])}<p>Everyone has different values, so make sure you use the row for your own student ID. If a file is missing from Blackboard, email ${tutorContact()}.</p>${src('Assessment Brief and Coursework Template')}`,
  rel:['task1','task2','cw-overview']},
 
 {id:'task1', cat:'coursework', q:'What is Task 1 (evidence prioritisation)?',
@@ -589,7 +612,7 @@ const MODULE_KB = [
 
 {id:'word-limits', cat:'coursework', q:'How strict are the word limits?',
  kw:['word limit','word count','words','maximum words','10%','over the word limit','too many words','length','how long','max words','tables count','calculations word','word limits policy','word limit penalty'],
- a:()=>`<p>The assessment brief says that where the template gives a maximum word count, it is applied as an <strong>actual maximum with no extra 10% allowance</strong>.</p><p>The University regulations (ARTA 1.12) also say that work exceeding the permitted word limit is subject to a penalty under the University's Word Limits Policy. You can find that policy through the ${portalLink()}.</p><p>The module documents also say word limits are indicative of the amount of work required, and that because the assessment includes calculations the limit is not accurate and should not be taken literally. Forensic scientists must present findings clearly and concisely, including only what is relevant.</p><p class="note">Because those statements pull in different directions, treat every limit in the template as a firm maximum, and ask ${esc(CONFIG.TUTOR_NAME)} if you are unsure how tables or calculations count.</p>${src('Assessment Brief, Module Guide and ARTA 2026/27')}`,
+ a:()=>`<p>The assessment brief says that where the template gives a maximum word count, it is applied as an <strong>actual maximum with no extra 10% allowance</strong>.</p><p>The University regulations (ARTA 1.12) also say that work exceeding the permitted word limit is subject to a penalty under the University's Word Limits Policy. You can find that policy through the ${portalLink()}.</p><p>The module documents also say word limits are indicative of the amount of work required, and that because the assessment includes calculations the limit is not accurate and should not be taken literally. Forensic scientists must present findings clearly and concisely, including only what is relevant.</p><p class="note">Because those statements pull in different directions, treat every limit in the template as a firm maximum, and ask ${tutorContact()} if you are unsure how tables or calculations count.</p>${src('Assessment Brief, Module Guide and ARTA 2026/27')}`,
  rel:['cw-overview','tutor','portal']},
 
 {id:'coursework-tutorial', cat:'coursework', q:'What help is there with the coursework?',
@@ -599,7 +622,7 @@ const MODULE_KB = [
 
 {id:'exam', cat:'exam', q:'Tell me about the exam',
  kw:['exam','examination','unseen exam','unseen examination','exam date','exam format','revision','exam tutorial','test','what is on the exam','exam preparation','exam time','exam room'],
- a:()=>`<p>The second assessment is an <strong>unseen examination</strong>. More detail is given in the assessment information packs and in tutorial sessions. There is an <strong>exam tutorial</strong> in teaching week 12 (TT week 21, "1 hour x 5").</p><p>The exam date, time and room aren’t in the documents I hold. Check your personal timetable and module announcements, or ask ${esc(CONFIG.TUTOR_NAME)} (${mail()}).</p>${src('Module Guide and Teaching schedule')}`,
+ a:()=>`<p>The second assessment is an <strong>unseen examination</strong>. More detail is given in the assessment information packs and in tutorial sessions. There is an <strong>exam tutorial</strong> in teaching week 12 (TT week 21, "1 hour x 5").</p><p>The exam date, time and room aren’t in the documents I hold. Check your personal timetable and module announcements, or ask ${tutorContact()}.</p>${src('Module Guide and Teaching schedule')}`,
  rel:['tutorials','assess-overview','calendar']},
 
 {id:'formative', cat:'exam', q:'What is formative assessment and feedback?',
@@ -763,7 +786,7 @@ const SHARED_KB = [
 
 {id:'support', cat:'support', q:'What academic support is available?',
  kw:['support','academic support','help','open door','open-door','appointment','meeting','teams call','office hours','drop in','talk to someone','need support','wellbeing','struggling','personal tutor','programme leader','student central','students union','su advice'],
- a:()=>`<p>Teaching staff run an <strong>open-door policy</strong>: visit their offices or arrange a Teams call whenever they are free. It's best to email first to make an appointment. ${esc(CONFIG.TUTOR_NAME)}: ${mail()}, office ${esc(CONFIG.TUTOR_OFFICE)}.</p><p>If you have difficulty understanding the University regulations, ARTA suggests talking to your <strong>Programme Leader</strong>, your <strong>Personal Tutor</strong>, or the Support section of your ${portalLink()}, or contacting Student Central. You can also get independent advice from the <strong>Students' Union Advice Team</strong>: <a href="mailto:su.advice@northumbria.ac.uk">su.advice@northumbria.ac.uk</a>.</p><p>For extensions, PECs, disability and medical circumstances, and appeals, see the questions under "University regulations and policies" and the Student Portal. You can also change font, size, colours and spacing on this page using <strong>Accessibility settings</strong> at the top.</p>${src('Module Guide and ARTA 2026/27')}`,
+ a:()=>`<p>Teaching staff run an <strong>open-door policy</strong>: visit their offices or arrange a Teams call whenever they are free. It's best to email first to make an appointment. ${tutorContact()}, office ${esc(CONFIG.TUTOR_OFFICE)}.</p><p>If you have difficulty understanding the University regulations, ARTA suggests talking to ${plContact()}, your <strong>Personal Tutor</strong>, or the Support section of your ${portalLink()}, or contacting Student Central. You can also get independent advice from the <strong>Students' Union Advice Team</strong>: <a href="mailto:su.advice@northumbria.ac.uk">su.advice@northumbria.ac.uk</a>.</p><p>For extensions, PECs, disability and medical circumstances, and appeals, see the questions under "University regulations and policies" and the Student Portal. You can also change font, size, colours and spacing on this page using <strong>Accessibility settings</strong> at the top.</p>${src('Module Guide and ARTA 2026/27')}`,
  rel:['portal','extension','pec','adjustments']},
 
 {id:'assess-regs', cat:'support', q:'Where are the assessment regulations?',
@@ -772,13 +795,13 @@ const SHARED_KB = [
  rel:['portal','misconduct','late']},
 
 {id:'a11y', cat:'support', q:'How do I change the text size, font or colours?',
- kw:['accessibility','font size','text size','bigger text','larger text','font','dyslexia','dyslexic','opendyslexic','colours','colors','contrast','high contrast','dark mode','dark','cream','read aloud','screen reader','spacing','line spacing','change font','easier to read','yellow','visual'],
- a:()=>`<p>Select <strong>Accessibility settings</strong> at the top right of the page. You can:</p>${ul(['change the text size from 90% to 200%','choose a font, including OpenDyslexic, Lexend, Atkinson Hyperlegible, Comic Sans style and Verdana','pick a colour scheme: standard, dark, black on white, white on black, yellow on black, cream, or soft blue','increase letter, word and line spacing','reduce motion','have new answers read aloud automatically (or use "Read aloud" under any answer)'])}<p>Your choices are remembered on this device where your browser allows it.</p>`,
+ kw:['accessibility','font size','text size','bigger text','larger text','font','dyslexia','dyslexic','bda','british dyslexia association','dyslexia friendly','open sans','colours','colors','contrast','high contrast','dark mode','dark','cream','read aloud','screen reader','spacing','line spacing','change font','easier to read','yellow','visual'],
+ a:()=>`<p>Select <strong>Accessibility settings</strong> at the top right of the page. You can:</p>${ul(['change the text size from 90% to 200%','choose a font from the sans serif list recommended by the British Dyslexia Association: Open Sans, Arial, Verdana, Tahoma, Trebuchet MS, Calibri, Century Gothic or Comic Sans','pick a colour scheme: standard, dark, black on white, white on black, yellow on black, cream, or soft blue','increase letter, word and line spacing','reduce motion','have new answers read aloud automatically (or use "Read aloud" under any answer)'])}<p>Your choices are remembered on this device where your browser allows it.</p>`,
  rel:['support']},
 
 {id:'about-bot', cat:'support', q:'What can this assistant do?',
  kw:['what can you do','who are you','are you ai','are you a bot','are you real','how do you work','help me','what is this','about this chatbot','what do you know','can you help'],
- a:()=>`<p>I'm the ${esc(CONFIG.MODULE_CODE)} module assistant. I answer frequently asked questions using this module's documents (for example the module guide, teaching schedule and assessment brief), the AI declaration and evidence log, the 2026–27 academic calendar, the University's AI guidance for students and the Academic Regulations for Taught Awards (ARTA) 2026/27.</p><p>I'm a set of prepared answers matched to your question, not a person and not generative AI, so I can’t see your timetable, marks or submissions, and I don’t give coursework answers. For anything else, contact ${esc(CONFIG.TUTOR_NAME)} (${mail()}).</p>`,
+ a:()=>`<p>I'm the ${esc(CONFIG.MODULE_CODE)} module assistant. I answer frequently asked questions using this module's documents (for example the module guide, teaching schedule and assessment brief), the AI declaration and evidence log, the 2026–27 academic calendar, the University's AI guidance for students and the Academic Regulations for Taught Awards (ARTA) 2026/27.</p><p>I'm a set of prepared answers matched to your question, not a person and not generative AI, so I can’t see your timetable, marks or submissions, and I don’t give coursework answers. For anything else, contact ${tutorContact()}.</p>`,
  rel:['deadline','schedule','ai-rules']},
 
 {id:'portal', cat:'support', q:'Where can I find university-wide guidance and policies?',
@@ -793,12 +816,12 @@ const SHARED_KB = [
 
 {id:'pec', cat:'regs', q:'What are Personal Extenuating Circumstances (PECs)?',
  kw:['ill','sick','ill exam','ill assessment','ill coursework','ill deadline','sick exam','unwell exam','unwell deadline','unwell coursework','pec','pecs','extenuating circumstances','personal extenuating circumstances','extenuating','illness','unwell','bereavement','personal circumstances','affected my performance','deferral','deferred','defer','mitigating circumstances','mitigation','ill health','serious problems'],
- a:()=>`<p>Personal Extenuating Circumstances (PECs) are serious personal circumstances that you feel may have significantly affected your performance in an exam or other assessment. Under ARTA, <strong>you are responsible for informing the Programme Assessment Board (PAB)</strong> of them, following the University's PEC policy. The policy and how to apply are in the ${portalLink()} under <strong>Personal Extenuating Circumstances (PECs)</strong>.</p><p><strong>What can happen once a PEC is approved</strong> (the Board decides):</p>${tbl(['Your situation','Likely outcome'],[['You made no attempt at the assessment, or the module cannot be compensated','You are deferred: a further uncapped first sit (or, if it was a resit, a further capped resit).'],['You failed the module but it is eligible for compensation','By default you receive a module pass, and the module is removed from your level average and classification. You may ask, by exception, to retake the assessment as a deferral instead.'],['You passed the module','You can choose to retake the affected assessment(s) as a deferral or keep your current marks. If a deferral gives a lower mark, your previous higher mark is kept.']])}<p>The Board doesn’t take personal supporting statements into account when making decisions. I can’t tell you whether your circumstances would be approved. If you are unsure what to do next, contact your Module Tutor, Personal Tutor or Programme Leader.</p>${src('ARTA 2026/27, section 1.13')}`,
+ a:()=>`<p>Personal Extenuating Circumstances (PECs) are serious personal circumstances that you feel may have significantly affected your performance in an exam or other assessment. Under ARTA, <strong>you are responsible for informing the Programme Assessment Board (PAB)</strong> of them, following the University's PEC policy. The policy and how to apply are in the ${portalLink()} under <strong>Personal Extenuating Circumstances (PECs)</strong>.</p><p><strong>What can happen once a PEC is approved</strong> (the Board decides):</p>${tbl(['Your situation','Likely outcome'],[['You made no attempt at the assessment, or the module cannot be compensated','You are deferred: a further uncapped first sit (or, if it was a resit, a further capped resit).'],['You failed the module but it is eligible for compensation','By default you receive a module pass, and the module is removed from your level average and classification. You may ask, by exception, to retake the assessment as a deferral instead.'],['You passed the module','You can choose to retake the affected assessment(s) as a deferral or keep your current marks. If a deferral gives a lower mark, your previous higher mark is kept.']])}<p>The Board doesn’t take personal supporting statements into account when making decisions. I can’t tell you whether your circumstances would be approved. If you are unsure what to do next, contact ${tutorRoleContact()}, your Personal Tutor or ${plContact()}.</p>${src('ARTA 2026/27, section 1.13')}`,
  rel:['extension','technical-ec','portal']},
 
 {id:'technical-ec', cat:'regs', q:'What if there was a technical problem during my exam or assessment?',
  kw:['technical problem','technical issue','turnitin problem','turnitin error','turnitin not working','turnitin crashed','blackboard not working','website crashed','system crashed','outage','glitch','technical extenuating circumstances','technical difficulties','turnitin down','blackboard down','system failure','internet failed','exam software','platform crashed','submission problem','could not submit'],
- a:()=>`<p>Technical extenuating circumstances affecting the conduct of an exam or assessment can affect individual students or whole groups. They are normally considered and resolved <strong>before</strong> the Programme Assessment Board, as part of the marks confirmation process, under the University's Technical Extenuating Circumstances Policy.</p><p>If something goes wrong, tell ${esc(CONFIG.TUTOR_NAME)} (${mail()}) as soon as you can. The Student Portal also covers <strong>Managing assessments in emergency scenarios</strong>.</p>${portalNote()}${src('ARTA 2026/27, section 1.14')}`,
+ a:()=>`<p>Technical extenuating circumstances affecting the conduct of an exam or assessment can affect individual students or whole groups. They are normally considered and resolved <strong>before</strong> the Programme Assessment Board, as part of the marks confirmation process, under the University's Technical Extenuating Circumstances Policy.</p><p>If something goes wrong, tell ${tutorContact()} as soon as you can. The Student Portal also covers <strong>Managing assessments in emergency scenarios</strong>.</p>${portalNote()}${src('ARTA 2026/27, section 1.14')}`,
  rel:['pec','extension','submit']},
 
 {id:'compensation', cat:'exam', q:'What is compensation for a failed module?',
@@ -808,12 +831,12 @@ const SHARED_KB = [
 
 {id:'repeat', cat:'exam', q:'What happens if I fail after my resit (repeating)?',
  kw:['repeat','repeating','repeat year','repeat the year','repeat module','fail after resit','failed resit','failed my resit','failed referral','repeat with attendance','without attendance','fail the year','15%'],
- a:()=>`<p>The rules below apply to full-time undergraduate students (and to newly registered part-time and postgraduate students from 2024/25). If you fail after referral and haven’t already repeated, you will normally be offered <strong>one opportunity to repeat</strong> the failed modules or the level.</p>${ul(['<strong>Levels 5, 6 and 7:</strong> you may be eligible if there is evidence of an attempt at at least half the credit in the level, meaning an overall mark of 15% or more in those modules. There’s no minimum level average or number of credits passed.','<strong>Levels 3 and 4:</strong> you can repeat regardless of attempts or credits passed.','<strong>Attendance:</strong> if more than half the credit in the level is passed and you attempted (15% or more) all the failed modules, you can repeat with or without attendance. Otherwise you must repeat with attendance. A final-year project or dissertation must be repeated with attendance. You can’t mix the two within the same semester.','<strong>Marks:</strong> a repeat is completed as if for the first time and normally overwrites earlier attempts. The Programme Assessment Board can exceptionally allow earlier attempts to count if the repeat mark is lower.','If you repeat only the failed modules, you can’t also retake passed modules to improve your classification.'])}<p>If you have not attempted at least half the credits in the level at levels 5, 6 or 7, you will have failed the programme and won’t be offered a repeat. These are complicated situations: talk to your Programme Leader or Personal Tutor early.</p>${src('ARTA 2026/27, section 3.7')}`,
+ a:()=>`<p>The rules below apply to full-time undergraduate students (and to newly registered part-time and postgraduate students from 2024/25). If you fail after referral and haven’t already repeated, you will normally be offered <strong>one opportunity to repeat</strong> the failed modules or the level.</p>${ul(['<strong>Levels 5, 6 and 7:</strong> you may be eligible if there is evidence of an attempt at at least half the credit in the level, meaning an overall mark of 15% or more in those modules. There’s no minimum level average or number of credits passed.','<strong>Levels 3 and 4:</strong> you can repeat regardless of attempts or credits passed.','<strong>Attendance:</strong> if more than half the credit in the level is passed and you attempted (15% or more) all the failed modules, you can repeat with or without attendance. Otherwise you must repeat with attendance. A final-year project or dissertation must be repeated with attendance. You can’t mix the two within the same semester.','<strong>Marks:</strong> a repeat is completed as if for the first time and normally overwrites earlier attempts. The Programme Assessment Board can exceptionally allow earlier attempts to count if the repeat mark is lower.','If you repeat only the failed modules, you can’t also retake passed modules to improve your classification.'])}<p>If you have not attempted at least half the credits in the level at levels 5, 6 or 7, you will have failed the programme and won’t be offered a repeat. These are complicated situations: talk to ${plContact()} or your Personal Tutor early.</p>${src('ARTA 2026/27, section 3.7')}`,
  rel:['pass-referral','compensation','progression']},
 
 {id:'progression', cat:'regs', q:'What do I need to progress to the next level?',
  kw:['progression','progress','progress to next level','move up','next year','trail','trailing','credits needed','120 credits','carry a module','proceed','level 5','level 6'],
- a:()=>`<p>On a standard full-time Honours degree:</p>${ul(['You progress to level 5 on attaining <strong>120 credits at level 4</strong>, and to level 6 on attaining <strong>120 credits at level 5</strong>.','Modules failed at the first attempt are referred (see the resits question), and some failed modules can be compensated.','Only in exceptional circumstances can the Programme Assessment Board let you <strong>trail</strong> a module, meaning you move up a level while still needing to complete credits from the previous one.','If you are eligible for referral but can’t take it, you can resit at the next scheduled sitting, which normally pauses progression until the level is completed.'])}<p>Part-time programmes, apprenticeships and programmes with an integrated foundation year work slightly differently. Check your programme documentation or ask your Programme Leader.</p>${src('ARTA 2026/27, sections 3.2, 3.6 and 5.11')}`,
+ a:()=>`<p>On a standard full-time Honours degree:</p>${ul(['You progress to level 5 on attaining <strong>120 credits at level 4</strong>, and to level 6 on attaining <strong>120 credits at level 5</strong>.','Modules failed at the first attempt are referred (see the resits question), and some failed modules can be compensated.','Only in exceptional circumstances can the Programme Assessment Board let you <strong>trail</strong> a module, meaning you move up a level while still needing to complete credits from the previous one.','If you are eligible for referral but can’t take it, you can resit at the next scheduled sitting, which normally pauses progression until the level is completed.'])}<p>Part-time programmes, apprenticeships and programmes with an integrated foundation year work slightly differently. Check your programme documentation or ask ${plContact()}.</p>${src('ARTA 2026/27, sections 3.2, 3.6 and 5.11')}`,
  rel:['pass-referral','compensation','repeat']},
 
 {id:'classification', cat:'regs', q:'How is my degree classified?',
@@ -828,7 +851,7 @@ const SHARED_KB = [
 
 {id:'adjustments', cat:'support', q:'Can I get adjustments to how I am assessed (disability or medical needs)?',
  kw:['reasonable adjustments','adjustments','disability','disabled','equality act','sap','student accessibility plan','accessibility plan','learning support','extra time exam','medical circumstances','medical condition','long-term condition','neurodiverse','adhd','autism','alteration to assessment'],
- a:()=>`<p>Exceptionally, you can ask for an alteration to your assessment arrangements under the <strong>Equality Act 2010</strong>. The request goes to the relevant Registrar and takes account of the need to make sure the programme's learning outcomes are met and competence standards aren’t compromised. Any alteration has to be authorised by the relevant Departmental Management Group (DMG).</p><p>The Student Portal has guidance on <strong>Disability and unforeseen medical circumstances</strong>. ARTA also allows an exception to the rule against re-attempting a passed module where there are PECs or a late-recognised Student Accessibility Plan (SAP).</p><p>Contact your Personal Tutor, Programme Leader or student support as early as you can. I can’t assess or agree adjustments myself.</p>${portalNote()}${src('ARTA 2026/27 (1.11, 2.1) and Student Portal')}`,
+ a:()=>`<p>Exceptionally, you can ask for an alteration to your assessment arrangements under the <strong>Equality Act 2010</strong>. The request goes to the relevant Registrar and takes account of the need to make sure the programme's learning outcomes are met and competence standards aren’t compromised. Any alteration has to be authorised by the relevant Departmental Management Group (DMG).</p><p>The Student Portal has guidance on <strong>Disability and unforeseen medical circumstances</strong>. ARTA also allows an exception to the rule against re-attempting a passed module where there are PECs or a late-recognised Student Accessibility Plan (SAP).</p><p>Contact your Personal Tutor, ${plContact()} or student support as early as you can. I can’t assess or agree adjustments myself.</p>${portalNote()}${src('ARTA 2026/27 (1.11, 2.1) and Student Portal')}`,
  rel:['support','pec','portal']},
 
 {id:'responsibilities', cat:'regs', q:'What are my responsibilities as a student, and what about illegible handwriting?',
@@ -1003,7 +1026,7 @@ function logUnanswered(q){
 /* =====================================================================
    Accessibility settings
    ===================================================================== */
-const FONTS = [['standard','Standard','Segoe UI, Arial'],['opendyslexic','OpenDyslexic','"OpenDyslexic","Comic Sans MS",sans-serif'],['lexend','Lexend','"Lexend",sans-serif'],['atkinson','Atkinson Hyperlegible','"Atkinson Hyperlegible",sans-serif'],['comic','Comic Sans style','"Comic Sans MS","Comic Neue",sans-serif'],['verdana','Verdana','Verdana,sans-serif']];
+const FONTS = [['standard','Standard','"Segoe UI", Arial, sans-serif'],['opensans','Open Sans','"Open Sans", Arial, sans-serif'],['arial','Arial','Arial, sans-serif'],['verdana','Verdana','Verdana, sans-serif'],['tahoma','Tahoma','Tahoma, sans-serif'],['trebuchet','Trebuchet MS','"Trebuchet MS", sans-serif'],['calibri','Calibri','Calibri, Carlito, sans-serif'],['centurygothic','Century Gothic','"Century Gothic", sans-serif'],['comic','Comic Sans','"Comic Sans MS", "Comic Neue", sans-serif']];
 const THEMES = [['light','Standard','#FFFFFF','#14213D'],['dark','Dark','#172033','#E8EEF9'],['hcwhite','Black on white','#FFFFFF','#000000'],['hcblack','White on black','#000000','#FFFFFF'],['yellowblack','Yellow on black','#000000','#FFE600'],['cream','Cream','#FFF9E3','#262626'],['blue','Soft blue','#EAF3FC','#0B2540']];
 const SPACINGS = [['normal','Standard'],['wide','Wide'],['wider','Extra wide']];
 function radioGroup(container, name, items, current, render){
@@ -1029,6 +1052,7 @@ function initSettings(){
   let saved = null; try { const g = store.getG('settings'); saved = g ? JSON.parse(g) : readJSON('settings', null); } catch(e){}
   if (saved) settings = {...settings, ...saved};
   else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) settings.theme = 'dark';
+  if (!FONTS.some(f => f[0] === settings.font)) settings.font = 'opensans';   // older saved choices (e.g. OpenDyslexic) move to Open Sans
   buildA11yControls(); applySettings();
   $('#fontOpts').addEventListener('change', e => { settings.font = e.target.value; applySettings(); });
   $('#themeOpts').addEventListener('change', e => { settings.theme = e.target.value; applySettings(); });
@@ -1054,11 +1078,8 @@ function initSettings(){
 function loadWebFonts(){
   if (!CONFIG.LOAD_WEB_FONTS) return;
   const l = document.createElement('link'); l.rel = 'stylesheet';
-  l.href = 'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Lexend:wght@400;600&display=swap';
+  l.href = 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap';
   document.head.appendChild(l);
-  const st = document.createElement('style');
-  st.textContent = '@font-face{font-family:"OpenDyslexic";font-weight:400;font-style:normal;font-display:swap;src:local("OpenDyslexic"),url("https://cdn.jsdelivr.net/npm/@fontsource/opendyslexic@5/files/opendyslexic-latin-400-normal.woff2") format("woff2");}@font-face{font-family:"OpenDyslexic";font-weight:700;font-style:normal;font-display:swap;src:local("OpenDyslexic Bold"),url("https://cdn.jsdelivr.net/npm/@fontsource/opendyslexic@5/files/opendyslexic-latin-700-normal.woff2") format("woff2");}';
-  document.head.appendChild(st);
 }
 function drawPeaks(){
   const svg = $('#peaks'); let seed = 20260927;
@@ -1204,7 +1225,7 @@ $('#exImport').addEventListener('click', () => {
    ===================================================================== */
 function initConfigText(){
   document.querySelectorAll('[data-cfg]').forEach(el => { const v = CONFIG[el.dataset.cfg]; if (v !== undefined) el.textContent = v; });
-  $('#mailLink').href = 'mailto:' + CONFIG.TUTOR_EMAIL;
+  $('#mailLink').href = mailto(CONFIG.TUTOR_EMAIL, CONFIG.MODULE_CODE + ' module query');
   $('#portalSide').href = CONFIG.PORTAL_URL;
   document.title = CONFIG.MODULE_CODE + ' ' + CONFIG.MODULE_TITLE + ' – Module Assistant';
 }
